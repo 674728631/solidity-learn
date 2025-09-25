@@ -1,0 +1,65 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "input",
+						"type": "uint256"
+					}
+				],
+				"name": "parse",
+				"outputs": [
+					{
+						"internalType": "string",
+						"name": "",
+						"type": "string"
+					}
+				],
+				"stateMutability": "pure",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"task1/question4.sol": "Int2RomanNumber"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"task1/question4.sol": {
+			"keccak256": "0xac1655497b45004d2dadcdd82379b09689287eed2199bb3a21cbca82e94e1722",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://8854a163deb798d9049aaaaad77ade8aeed9600a420da0e3c392400e171120a4",
+				"dweb:/ipfs/QmfJw71rmt8tvkidZNGjMvyUFWVjiCTvVpeRXydpzrnEGK"
+			]
+		}
+	},
+	"version": 1
+}

@@ -6,14 +6,19 @@
 	"output": {
 		"abi": [
 			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
 				"inputs": [
 					{
 						"internalType": "string",
-						"name": "name",
+						"name": "input",
 						"type": "string"
 					}
 				],
-				"name": "getVotes",
+				"name": "parse",
 				"outputs": [
 					{
 						"internalType": "uint256",
@@ -22,31 +27,6 @@
 					}
 				],
 				"stateMutability": "view",
-				"type": "function"
-			},
-			{
-				"inputs": [],
-				"name": "resetVotes",
-				"outputs": [],
-				"stateMutability": "nonpayable",
-				"type": "function"
-			},
-			{
-				"inputs": [
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256",
-						"name": "voteCount",
-						"type": "uint256"
-					}
-				],
-				"name": "vote",
-				"outputs": [],
-				"stateMutability": "nonpayable",
 				"type": "function"
 			}
 		],
@@ -63,7 +43,7 @@
 	},
 	"settings": {
 		"compilationTarget": {
-			"task1/question1.sol": "Voting"
+			"task1/question3.sol": "RomanNumber2Int"
 		},
 		"evmVersion": "prague",
 		"libraries": {},
@@ -77,12 +57,12 @@
 		"remappings": []
 	},
 	"sources": {
-		"task1/question1.sol": {
-			"keccak256": "0xbabba88edaee59ec0033a94b7e49848ae30830db0349bc3107900bd638fc7ed0",
+		"task1/question3.sol": {
+			"keccak256": "0x8091d4fb8fe78e1f2cffd1d59cc13e014e58d2486ad0184ed2bdba200451eae6",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://a8e7371a52804fa9de0a676360c15661eb53d6b12c6ea75fdad2b684eed8b4e9",
-				"dweb:/ipfs/QmQh7J3dBmCHUn9Gg7tNm4NhoB4DfqTDypKwfffBpfoc66"
+				"bzz-raw://0df5ecfe7e5bf770c7d0b9ac2517b20e79d61cb58cc2186c528dd8994a665256",
+				"dweb:/ipfs/QmeUr3Em59yxj1r5QNAApx3cgac2so8XERTixdxu8EFtAr"
 			]
 		}
 	},

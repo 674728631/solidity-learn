@@ -3,7 +3,7 @@ pragma solidity ^0.8.21;
 
 contract Voting {
     // 一个mapping来存储候选人的得票数
-    mapping(string => uint256) public voteMapping;
+    mapping(string => uint256) private  voteMapping;
 
     string[] private allUser;
 

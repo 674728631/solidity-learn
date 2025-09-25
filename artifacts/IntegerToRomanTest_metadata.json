@@ -1,0 +1,77 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "testBasicConversions",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "testEdgeCases",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"task1/test.sol": "IntegerToRomanTest"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"task1/test.sol": {
+			"keccak256": "0x496694f58d16c7184587cb57b0647ab99b6b54a165c9a1d1147d047f77d18834",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://c83de0a25b86b41f2d7ca6fcfb9cc2b9a7720a4fd22e99499d10cdcf8823edf9",
+				"dweb:/ipfs/QmPVBr9FCwmGXBepZeKtmLhbjXA9C3mdQYK9SiT6VmHyx7"
+			]
+		}
+	},
+	"version": 1
+}
