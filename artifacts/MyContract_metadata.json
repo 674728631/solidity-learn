@@ -1,0 +1,45 @@
+{
+	"compiler": {
+		"version": "0.8.30+commit.73712a01"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"task2/question3.sol": "MyContract"
+		},
+		"evmVersion": "prague",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"task2/question3.sol": {
+			"keccak256": "0x1e6d6ae79dd7cdc6cd7e4f6f651d6c9d9611adc4ccaf90404a4033a1572e6fb5",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://96f8d73787d1c167057e6f8dea02171e7d1dcc3f12782eadb8d2db642b8c45c1",
+				"dweb:/ipfs/QmU4QKcmKjECgWQ9PciS4zQ9EPBTaj99ZDe3Ute7567QNB"
+			]
+		}
+	},
+	"version": 1
+}
