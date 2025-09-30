@@ -44,6 +44,7 @@ pragma solidity ^0.8.0;
     时间限制：添加一个时间限制，只有在特定时间段内才能捐赠。
 */
 import "@openzeppelin/contracts/utils/Arrays.sol";
+import "hardhat/console.sol";
 
 contract BeggingContract {
     // 合约所有者
@@ -66,10 +67,10 @@ contract BeggingContract {
 
     User[] private allUsers;
 
-    constructor(uint256 _start, uint256 _end) {
+    constructor() {
         owner = msg.sender;
-        start = _start;
-        end = _end;
+        start = 1759195465;
+        end = 1759295465;
     }
 
     // 只有所有者可以调用
@@ -86,17 +87,19 @@ contract BeggingContract {
         _;
     }
 
-    receive() external payable {}
+    receive() external payable {
+        donate();
+    }
 
     // 一个 donate 函数，允许用户向合约发送以太币，并记录捐赠信息。
-    function donate(uint256 amount) external payable checkTime {
+    function donate() public payable checkTime {
         require(msg.sender != address(0), "address error");
 
-        donations[msg.sender] += amount;
+        donations[msg.sender] += msg.value;
 
         bool exist = false;
         if (allUsers.length == 0) {
-            allUsers.push(User(msg.sender, amount));
+            allUsers.push(User(msg.sender, msg.value));
             exist = true;
         } else {
             for (uint256 i = 0; i < allUsers.length; i++) {
@@ -108,15 +111,18 @@ contract BeggingContract {
             }
         }
         if (!exist) {
-            allUsers.push(User(msg.sender, amount));
+            allUsers.push(User(msg.sender, msg.value));
         }
 
-        emit donateLog(msg.sender, amount);
+        payable(this).transfer(msg.value);
+
+        emit donateLog(msg.sender, msg.value);
     }
 
     // 一个 withdraw 函数，允许合约所有者提取所有资金。
     function withdraw() external payable onlyOwner {
         uint256 balance = address(this).balance;
+        require(balance > 0, "balance not enough");
         (bool success, ) = payable(owner).call{value: balance}("");
         require(success, "Withdrawal failed");
     }
@@ -169,7 +175,7 @@ contract BeggingContract {
         return top3;
     }
 
-    function test() public view returns(uint256) {
+    function test() public view returns (uint256) {
         return allUsers.length;
     }
 }

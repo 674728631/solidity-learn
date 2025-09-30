@@ -6,18 +6,7 @@
 	"output": {
 		"abi": [
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "_start",
-						"type": "uint256"
-					},
-					{
-						"internalType": "uint256",
-						"name": "_end",
-						"type": "uint256"
-					}
-				],
+				"inputs": [],
 				"stateMutability": "nonpayable",
 				"type": "constructor"
 			},
@@ -41,13 +30,7 @@
 				"type": "event"
 			},
 			{
-				"inputs": [
-					{
-						"internalType": "uint256",
-						"name": "amount",
-						"type": "uint256"
-					}
-				],
+				"inputs": [],
 				"name": "donate",
 				"outputs": [],
 				"stateMutability": "payable",
@@ -232,12 +215,20 @@
 				"dweb:/ipfs/QmPFKL2r9CBsMwmUqqdcFPfHZB2qcs9g1HDrPxzWSxomvy"
 			]
 		},
-		"task2/question3.sol": {
-			"keccak256": "0x7d5cad15622ca3d2a53163a872d3af3d144174f347060d194b937c0295ada183",
+		"hardhat/console.sol": {
+			"keccak256": "0x7434453e6d3b7d0e5d0eb7846ffdbc27f0ccf3b163591263739b628074dc103a",
 			"license": "MIT",
 			"urls": [
-				"bzz-raw://b4f4481d1853607c46f16be586d23b0efa1db92320bdcb575cb579f72568ba6c",
-				"dweb:/ipfs/QmTWvpFAxbpCZ3Xe7BrvgVmseyyFKPXRHy6zncLUFSVMTF"
+				"bzz-raw://49355f780520494d1d5a0f01858385e51bb5280ce0ecfb960f16995065dca395",
+				"dweb:/ipfs/QmSwJ6C5QLz6xKeQZS8wbwjU1KxRFTYfwbGmtzisd5sRW4"
+			]
+		},
+		"task2/question3.sol": {
+			"keccak256": "0xae3aac60cadf52cb78eb5d3cb121a57fda86ecb9da016e2de0365ebcdf4a0539",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://1b594b9206a5483058103d011a77b0532de817e860f39199df7d66f8ecd7dbaf",
+				"dweb:/ipfs/QmUQ4MT7deSB2yJRhnBf2iXfVFH5jCyUcQwaDBT2rFtsCP"
 			]
 		}
 	},
