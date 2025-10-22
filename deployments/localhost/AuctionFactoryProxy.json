@@ -9,7 +9,7 @@
     "fallback() payable",
     "function auctionIdToAddress(uint256) view returns (address)",
     "function auctionInstances(uint256) view returns (address)",
-    "function createAuction()",
+    "function createAuction(address)",
     "function createAuctionNFT(uint256,address,uint256,uint256,uint256)",
     "function getAuctionById(uint256) view returns (address)",
     "function initialize()",

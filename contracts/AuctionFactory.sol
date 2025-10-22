@@ -6,6 +6,7 @@ import "./Auction.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 import "hardhat/console.sol";
+import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 
 // AuctionFactory 工厂合约用于创建 auction 拍卖合约的实例
 contract AuctionFactory is UUPSUpgradeable, OwnableUpgradeable {
@@ -23,10 +24,8 @@ contract AuctionFactory is UUPSUpgradeable, OwnableUpgradeable {
     }
 
     // 创建拍卖合约实例(创建一场拍卖)
-    function createAuction() external {
-        console.log("createAuction", msg.sender, address(this));
-        Auction newAuction = new Auction();
-        newAuction.initialize(msg.sender);
+    function createAuction(address auctionAddress) external {
+        ERC1967Proxy newAuction = new ERC1967Proxy(auctionAddress, new bytes(0));
         auctionInstances.push(address(newAuction));
         auctionIdToAddress[nextAuctionId] = address(newAuction);
         nextAuctionId++;
@@ -40,8 +39,10 @@ contract AuctionFactory is UUPSUpgradeable, OwnableUpgradeable {
         uint256 startingPrice,
         uint256 duration
     ) external {
-
-        console.log("factory createAuctionNFT time , nft owner:", ERC721(nftContract).ownerOf(tokenId));
+        console.log(
+            "factory createAuctionNFT time , nft owner:",
+            ERC721(nftContract).ownerOf(tokenId)
+        );
         // 获取拍卖合约地址
         address auction = auctionIdToAddress[auctionId];
         require(auction != address(0), "Auction does not exist");
@@ -67,10 +68,8 @@ contract AuctionFactory is UUPSUpgradeable, OwnableUpgradeable {
         address newImplementation
     ) internal override onlyOwner {}
 
-        fallback() external payable {
-
+    fallback() external payable {
         console.log("factory fallback");
-
     }
 
     receive() external payable {
@@ -78,7 +77,7 @@ contract AuctionFactory is UUPSUpgradeable, OwnableUpgradeable {
     }
 
     // 根据拍卖合约id读取拍卖合约地址
-    function getAuctionById(uint256 id) external view returns(address) {
+    function getAuctionById(uint256 id) external view returns (address) {
         return auctionIdToAddress[id];
     }
 }

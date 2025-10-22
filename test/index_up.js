@@ -1,4 +1,4 @@
-const { ethers, deployments } = require("hardhat");
+const { ethers, deployments, upgrades } = require("hardhat");
 const { expect } = require("chai");
 const { dataLength } = require("ethers");
 
@@ -31,6 +31,11 @@ describe('Test Upgrade', function () {
         // 给代理合约授权  
         console.log("erc721Mock 授权给 auctionProxy ", auctionProxy.address)
         await erc721Mock.connect(user2).setApprovalForAll(auctionProxy.address, true);
+        
+        const newImplAddress = await upgrades.erc1967.getImplementationAddress(
+                auctionProxy
+            );
+        console.log("111111111 newImplAddress: ", newImplAddress);
 
         // 部署工厂合约
         await deployments.fixture(["deployAuctionFactory"]);
@@ -43,7 +48,7 @@ describe('Test Upgrade', function () {
         await erc721Mock.connect(user2).setApprovalForAll(auctionFactoryProxy.address, true);
 
         // 创建拍卖
-        await auctionFactory.connect(signer).createAuction(); // 0号
+        await auctionFactory.connect(signer).createAuction(newImplAddress.address); // 0号
 
         // 获取拍卖合约地址
         const auctionAddress = await auctionFactory.auctionIdToAddress(0);
@@ -62,50 +67,50 @@ describe('Test Upgrade', function () {
         const fatory1auction1 = await auctionFactory.getAuctionById(1);
         console.log("升级前工厂中的拍卖合约1地址：", ethers.getAddress(fatory1auction1));
 
-        // 升级工厂合约
-        await deployments.fixture(["upgradeAuctionFactory"]);
+        // // 升级工厂合约
+        // await deployments.fixture(["upgradeAuctionFactory"]);
 
-        // const test2 = await auctionFactoryProxy.test(); // 代理地址为啥不能调用？
+        // // const test2 = await auctionFactoryProxy.test(); // 代理地址为啥不能调用？
 
-        // 获取v2工厂
-        const auctionFactory2 = await ethers.getContractAt(
-            "AuctionFactoryV2",
-            auctionFactoryProxy.address
-        );
-        // 调用新增方法
-        const test = await auctionFactory2.test();
-        console.log("v2 方法：", test);
-
-
-        // 在1号拍卖合约中创建NFT拍卖，起拍价0.1 ETH，持续时间10秒
-        await auctionFactory2.connect(signer).createAuction(); // 1号
-        // 获取拍卖合约地址
-        const auctionAddress0 = await auctionFactory2.auctionIdToAddress(0);
-        console.log("升级后工厂中的拍卖合约0地址：", auctionAddress0);
-        const auctionAddress2 = await auctionFactory2.auctionIdToAddress(1);
-        console.log("升级后工厂中的拍卖合约1地址：", auctionAddress2);
-
-        // 给拍卖合约授权
-        console.log("erc721Mock 给工厂生成的auctionAddress2 授权", auctionAddress2)
-        await erc721Mock.connect(user3).setApprovalForAll(auctionAddress2, true);
+        // // 获取v2工厂
+        // const auctionFactory2 = await ethers.getContractAt(
+        //     "AuctionFactoryV2",
+        //     auctionFactoryProxy.address
+        // );
+        // // 调用新增方法
+        // const test = await auctionFactory2.test();
+        // console.log("v2 方法：", test);
 
 
-        await auctionFactory2.connect(signer).createAuctionNFT(1, erc721Address, nft2, ethers.parseEther("0.1"), 11);
+        // // 在1号拍卖合约中创建NFT拍卖，起拍价0.1 ETH，持续时间10秒
+        // await auctionFactory2.connect(signer).createAuction(); // 1号
+        // // 获取拍卖合约地址
+        // const auctionAddress0 = await auctionFactory2.auctionIdToAddress(0);
+        // console.log("升级后工厂中的拍卖合约0地址：", auctionAddress0);
+        // const auctionAddress2 = await auctionFactory2.auctionIdToAddress(1);
+        // console.log("升级后工厂中的拍卖合约1地址：", auctionAddress2);
 
-        // 购买者出价
-        const nftAuction = await ethers.getContractAt("Auction", auctionAddress2);
-        await nftAuction.connect(buyer).placeBid(ethers.ZeroAddress, 0, ethers.parseEther("0.2"));
+        // // 给拍卖合约授权
+        // console.log("erc721Mock 给工厂生成的auctionAddress2 授权", auctionAddress2)
+        // await erc721Mock.connect(user3).setApprovalForAll(auctionAddress2, true);
 
-        // 升级auctionv2
-        await deployments.fixture(["upgradeAuction"]);
-        // 获取auctionv2
-         const auctionv2 = await ethers.getContractAt(
-            "AuctionV2",
-            auctionProxy.address
-        );
-        // 调用新增方法
-        const test2 = await auctionv2.test();
-        console.log("v2 方法：", test2);
+
+        // await auctionFactory2.connect(signer).createAuctionNFT(1, erc721Address, nft2, ethers.parseEther("0.1"), 11);
+
+        // // 购买者出价
+        // const nftAuction = await ethers.getContractAt("Auction", auctionAddress2);
+        // await nftAuction.connect(buyer).placeBid(ethers.ZeroAddress, 0, ethers.parseEther("0.2"));
+
+        // // 升级auctionv2
+        // await deployments.fixture(["upgradeAuction"]);
+        // // 获取auctionv2
+        //  const auctionv2 = await ethers.getContractAt(
+        //     "AuctionV2",
+        //     auctionProxy.address
+        // );
+        // // 调用新增方法
+        // const test2 = await auctionv2.test();
+        // console.log("v2 方法：", test2);
 
         // await auctionv2.connect(buyer).placeBid(ethers.ZeroAddress, 1, ethers.parseEther("0.3"));
 

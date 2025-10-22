@@ -8,8 +8,10 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "./IAuction.sol";
 import "hardhat/console.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-contract Auction is Initializable, IAuction, IERC721Receiver {
+contract Auction is UUPSUpgradeable, IAuction, IERC721Receiver, OwnableUpgradeable {
     // 拍卖结构体
     struct AuctionStruct {
         address seller; // 卖家地址
@@ -28,16 +30,15 @@ contract Auction is Initializable, IAuction, IERC721Receiver {
     uint256 public nextAuctionId;
     // 拍卖品ID到拍卖的映射
     mapping(uint256 => AuctionStruct) public auctions;
-    // 合约所有者地址(主持人)
-    address public owner;
 
     // 预言机币对地址映射
     mapping(address tokenAddress => AggregatorV3Interface)
         public tokenToPriceFeed;
 
     // 初始化函数
-    function initialize(address _owner) public initializer {
-        owner = _owner;
+    function initialize() public initializer {
+        __Ownable_init();
+        __UUPSUpgradeable_init();
     }
 
     // 创建拍卖
@@ -169,7 +170,6 @@ contract Auction is Initializable, IAuction, IERC721Receiver {
 
     // 结算拍卖
     function endAuction(uint256 auctionId) external override {
-        require(msg.sender == owner, "Only owner can end auction");
         // 只能在拍卖结束后结算
         AuctionStruct storage auction = auctions[auctionId];
 
@@ -242,7 +242,6 @@ contract Auction is Initializable, IAuction, IERC721Receiver {
 
     // 设置预言机地址
     function setPriceFeed(address _tokenAddress, address _priceFeed) external {
-        require(owner == msg.sender, "Only admin can set price feed");
         tokenToPriceFeed[_tokenAddress] = AggregatorV3Interface(_priceFeed);
     }
 
@@ -275,4 +274,9 @@ contract Auction is Initializable, IAuction, IERC721Receiver {
     ) external override returns (bytes4) {
         return this.onERC721Received.selector; // 必须返回固定值
     }
+
+        // 升级合约
+    function _authorizeUpgrade(
+        address newImplementation
+    ) internal override onlyOwner {}
 }

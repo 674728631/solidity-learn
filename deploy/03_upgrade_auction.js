@@ -20,7 +20,6 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
 
     const auctionV2Proxy = await upgrades.upgradeProxy(proxyAddress, AuctionV2, {
         initializer: "initialize",
-        args: [deployer]
     });
 
     console.log("合约升级完成");

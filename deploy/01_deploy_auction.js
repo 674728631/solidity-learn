@@ -12,7 +12,7 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
   const Auction = await ethers.getContractFactory("Auction");
 
   // 通过代理合约部署
-  const auctionProxy = await upgrades.deployProxy(Auction, [deployer], {
+  const auctionProxy = await upgrades.deployProxy(Auction, [], {
     initializer: "initialize",
   });
 

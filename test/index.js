@@ -40,7 +40,7 @@ describe('Test', function () {
         await erc721Mock.connect(signer).setApprovalForAll(auctionFactoryProxy.address, true);
 
         // 创建拍卖
-        await auctionFactory.connect(signer).createAuction(); // 0号
+        await auctionFactory.connect(signer).createAuction(auctionProxy.address); // 0号
 
         // 获取拍卖合约地址
         const auctionAddress = await auctionFactory.auctionIdToAddress(0);
