@@ -31,9 +31,9 @@ describe('Test Upgrade', function () {
         // 给代理合约授权  
         console.log("erc721Mock 授权给 auctionProxy ", auctionProxy.address)
         await erc721Mock.connect(user2).setApprovalForAll(auctionProxy.address, true);
-        
+
         const newImplAddress = await upgrades.erc1967.getImplementationAddress(
-                auctionProxy
+                auctionProxy.address
             );
         console.log("111111111 newImplAddress: ", newImplAddress);
 
