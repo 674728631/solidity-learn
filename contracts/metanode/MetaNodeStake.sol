@@ -381,14 +381,17 @@ contract MetaNodeStake is
         Pool storage pool_ = pool[_pid];
         User storage user_ = user[_pid][_user];
         uint256 accMetaNodePerST = pool_.accMetaNodePerST;
+        console.log("pendingMetaNodeByBlockNumber accMetaNodePerST: ", accMetaNodePerST);
         uint256 stSupply = pool_.stTokenAmount;
-
+        console.log("pendingMetaNodeByBlockNumber _blockNumber: ", _blockNumber);
+        console.log("pendingMetaNodeByBlockNumber pool_.lastRewardBlock: ", pool_.lastRewardBlock);
         if (_blockNumber > pool_.lastRewardBlock && stSupply != 0) {
             uint256 multiplier = getMultiplier(pool_.lastRewardBlock, _blockNumber);
             uint256 MetaNodeForPool = multiplier * pool_.poolWeight / totalPoolWeight;
             accMetaNodePerST = accMetaNodePerST + MetaNodeForPool * (1 ether) / stSupply;
         }
-
+        console.log("pendingMetaNodeByBlockNumber user_.stAmount * accMetaNodePerST / (1 ether) - user_.finishedMetaNode + user_.pendingMetaNode: ", 
+        accMetaNodePerST, user_.finishedMetaNode, user_.pendingMetaNode);
         return user_.stAmount * accMetaNodePerST / (1 ether) - user_.finishedMetaNode + user_.pendingMetaNode;
     }
 
@@ -418,6 +421,8 @@ contract MetaNodeStake is
             }
             requestAmount = requestAmount + user_.requests[i].amount;
         }
+        console.log("withdrawAmount requestAmount: ", requestAmount);
+        console.log("withdrawAmount pendingWithdrawAmount: ", pendingWithdrawAmount);
     }
 
     // ************************************** PUBLIC FUNCTION **************************************
@@ -432,12 +437,17 @@ contract MetaNodeStake is
         if (block.number <= pool_.lastRewardBlock) {
             return;
         }
+        console.log("updatePool block.number: ", block.number);
+        console.log("updatePool pool_.lastRewardBlock: ", pool_.lastRewardBlock);
         // 计算从 pool_.lastRewardBlock 到 block.number 之间的区块奖励倍数。
         // 将奖励倍数乘以池的权重 pool_.poolWeight ，得到该池应分配的总奖励 totalMetaNode 。
+        console.log("updatePool lastRewardBlock, number: ", pool_.lastRewardBlock, block.number);
         (bool success1, uint256 totalMetaNode) = getMultiplier(pool_.lastRewardBlock, block.number).tryMul(pool_.poolWeight);
+        console.log("updatePool totalMetaNode: ", totalMetaNode);
         require(success1, "overflow");
         // 将总奖励除以所有池的总权重 totalPoolWeight ，得到该池的实际奖励份额。
         (success1, totalMetaNode) = totalMetaNode.tryDiv(totalPoolWeight);
+        console.log("updatePool totalMetaNode/totalPoolWeight: ", totalMetaNode);
         require(success1, "overflow");
 
         uint256 stSupply = pool_.stTokenAmount;
@@ -456,7 +466,8 @@ contract MetaNodeStake is
         }
 
         pool_.lastRewardBlock = block.number;
-
+        console.log("updatePool pool_.lastRewardBlock2: ", pool_.lastRewardBlock);
+        console.log("updatePool pool_.accMetaNodePerST: ", pool_.accMetaNodePerST);
         emit UpdatePool(_pid, pool_.lastRewardBlock, totalMetaNode);
     }
 
@@ -519,7 +530,7 @@ contract MetaNodeStake is
 
         // 计算并分配用户待领取的奖励。 (质押量 × 单位奖励) - 已结算奖励
         uint256 pendingMetaNode_ = user_.stAmount * pool_.accMetaNodePerST / (1 ether) - user_.finishedMetaNode;
-
+        console.log("unstake user_.pendingMetaNode_:", pendingMetaNode_);
         if(pendingMetaNode_ > 0) {
             user_.pendingMetaNode = user_.pendingMetaNode + pendingMetaNode_;
         }
@@ -532,13 +543,15 @@ contract MetaNodeStake is
                 amount: _amount, // 取消质押的数量。
                 unlockBlocks: block.number + pool_.unstakeLockedBlocks // 解锁区块高度（当前区块 + 锁定区块数 unstakeLockedBlocks ）。
             }));
+            console.log("unstake user_.requests.amount:", user_.requests[0].amount);
+            console.log("unstake user_.requests.unlockBlocks:", user_.requests[0].unlockBlocks);
         }
-
+        
         // 减少池的总质押量 stTokenAmount    
         pool_.stTokenAmount = pool_.stTokenAmount - _amount;
         // finishedMetaNode = 当前质押量 × 单位奖励 ，表示用户的最新奖励结算点。
         user_.finishedMetaNode = user_.stAmount * pool_.accMetaNodePerST / (1 ether);
-
+        console.log("unstake user_.finishedMetaNode:", user_.finishedMetaNode);
         emit RequestUnstake(msg.sender, _pid, _amount);
     }
 
@@ -554,8 +567,10 @@ contract MetaNodeStake is
 
         uint256 pendingWithdraw_;
         uint256 popNum_;
+        console.log("withdraw user_.requests.length: ", user_.requests.length);
         // 遍历用户的提取请求列表，筛选已解锁的请求。
         for (uint256 i = 0; i < user_.requests.length; i++) {
+            console.log("withdraw for requests: ", user_.requests[i].unlockBlocks, block.number);
             if (user_.requests[i].unlockBlocks > block.number) {
                 break; // 遇到第一个未解锁的请求时终止遍历（因为请求是按解锁时间排序的）。
             }
@@ -563,6 +578,7 @@ contract MetaNodeStake is
             pendingWithdraw_ = pendingWithdraw_ + user_.requests[i].amount;
             popNum_++;
         }
+        console.log("withdraw pendingWithdraw_: ", pendingWithdraw_);
         // 更新用户的请求列表（移除已处理的请求）。
         for (uint256 i = 0; i < user_.requests.length - popNum_; i++) {
             user_.requests[i] = user_.requests[i + popNum_]; // 前移未处理的请求
@@ -581,6 +597,7 @@ contract MetaNodeStake is
             }
         }
 
+        console.log("emit withdraw: ", _pid, pendingWithdraw_, block.number);
         emit Withdraw(msg.sender, _pid, pendingWithdraw_, block.number);
     }
 
@@ -594,16 +611,17 @@ contract MetaNodeStake is
         User storage user_ = user[_pid][msg.sender];
 
         updatePool(_pid);
-
+        console.log("claim user_.stAmount * accMetaNodePerST / (1 ether) - user_.finishedMetaNode + user_.pendingMetaNode:", 
+        pool_.accMetaNodePerST, user_.finishedMetaNode, user_.pendingMetaNode);
         uint256 pendingMetaNode_ = user_.stAmount * pool_.accMetaNodePerST / (1 ether) - user_.finishedMetaNode + user_.pendingMetaNode;
-
+        console.log("claim pendingMetaNode_: ", pendingMetaNode_);
         if(pendingMetaNode_ > 0) {
             user_.pendingMetaNode = 0;
             _safeMetaNodeTransfer(msg.sender, pendingMetaNode_);
         }
 
         user_.finishedMetaNode = user_.stAmount * pool_.accMetaNodePerST / (1 ether);
-
+        console.log("claim user_.finishedMetaNode: ", user_.finishedMetaNode);
         emit Claim(msg.sender, _pid, pendingMetaNode_);
     }
 

@@ -5,6 +5,7 @@ require("@nomicfoundation/hardhat-toolbox");
 require("hardhat-deploy");
 require("@openzeppelin/hardhat-upgrades");
 require("dotenv").config();
+require("hardhat-coverage");
 
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
@@ -22,5 +23,12 @@ module.exports = {
     user1: 1,
     user2: 2,
     user3: 3,
+  },
+  networks: {
+    hardhat: {
+      mining: {
+        auto: true, // 确保自动挖矿开启
+      },
+    },
   },
 };

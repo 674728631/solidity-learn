@@ -18,6 +18,7 @@
     "dotenv": "^17.2.3",
     "ethers": "^6.15.0",
     "hardhat": "^2.26.3",
+    "hardhat-coverage": "^0.9.19",
     "hardhat-deploy": "^1.0.4",
     "hardhat-gas-reporter": "^2.3.0",
     "solidity-coverage": "^0.8.16",
